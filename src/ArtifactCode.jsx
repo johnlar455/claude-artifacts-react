@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 
 const API_URL = 'https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image';
-const API_KEY = 'sk-qgFdciW3STM8RFiBs3xehi4fQUA2NWfC7zBuJCxD3k89qXow'; // Replace with your actual API key
+const API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
 
 export default function ImageGenerator() {
   const [prompt, setPrompt] = useState('');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [history, setHistory] = useState([]);
 
   const generateImage = async () => {
     setLoading(true);
@@ -39,7 +40,9 @@ export default function ImageGenerator() {
       }
 
       const data = await response.json();
-      setImage(`data:image/png;base64,${data.artifacts[0].base64}`);
+      const newImage = `data:image/png;base64,${data.artifacts[0].base64}`;
+      setImage(newImage);
+      setHistory(prevHistory => [...prevHistory, { prompt, image: newImage }]);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -47,9 +50,13 @@ export default function ImageGenerator() {
     }
   };
 
+  const removeFromHistory = (index) => {
+    setHistory(prevHistory => prevHistory.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="container mx-auto p-4">
-      <Card className="w-full max-w-md mx-auto">
+      <Card className="w-full max-w-md mx-auto mb-8">
         <CardHeader>
           <CardTitle>Image Generator</CardTitle>
         </CardHeader>
@@ -77,6 +84,32 @@ export default function ImageGenerator() {
           Powered by Stable Diffusion API
         </CardFooter>
       </Card>
+
+      {history.length > 0 && (
+        <Card className="w-full max-w-md mx-auto">
+          <CardHeader>
+            <CardTitle>Generation History</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {history.map((item, index) => (
+                <div key={index} className="relative">
+                  <img src={item.image} alt={item.prompt} className="w-full rounded-lg" />
+                  <p className="mt-2 text-sm text-gray-600">{item.prompt}</p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-2 right-2 bg-white bg-opacity-50 hover:bg-opacity-75"
+                    onClick={() => removeFromHistory(index)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
