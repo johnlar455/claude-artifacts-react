@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, X } from 'lucide-react';
 
-const API_URL = 'https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image';
+const API_URL = 'https://api.stability.ai/v2beta/stable-image/generate/ultra;
 const API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
 
 export default function ImageGenerator() {
