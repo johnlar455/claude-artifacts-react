@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, X } from 'lucide-react';
 
-const API_URL = 'https://api.stability.ai/v2beta/stable-image/generate/ultra;
+const API_URL = 'https://api.stability.ai/v2beta/stable-image/generate/ultra';
 const API_KEY = 'sk-qgFdciW3STM8RFiBs3xehi4fQUA2NWfC7zBuJCxD3k89qXow'; // Replace with your actual API key
 
 export default function ImageGenerator() {
